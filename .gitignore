@@ -43,8 +43,6 @@ ENV/
 data/
 datasets/
 *.csv
-*.json
-*.txt
 
 # Logs
 logs/
