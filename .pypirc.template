@@ -1,0 +1,19 @@
+# .pypirc Template
+# Copy this to your home directory as .pypirc (without the .template extension)
+# Location:
+#   Windows: C:\Users\YourUsername\.pypirc
+#   Linux/Mac: ~/.pypirc
+
+[distutils]
+index-servers =
+    pypi
+    testpypi
+
+[pypi]
+username = __token__
+password = pypi-YOUR_PYPI_TOKEN_HERE
+
+[testpypi]
+repository = https://test.pypi.org/legacy/
+username = __token__
+password = pypi-YOUR_TESTPYPI_TOKEN_HERE

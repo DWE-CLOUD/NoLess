@@ -2,6 +2,8 @@ name: Publish NoLess CLI
 
 on:
   push:
+    branches:
+      - main
     tags:
       - "v*"
   workflow_dispatch:
@@ -62,10 +64,16 @@ jobs:
         id: target
         env:
           WORKFLOW_TARGET: ${{ github.event.inputs.target }}
+          REF_TYPE: ${{ github.ref_type }}
         run: |
           target="${WORKFLOW_TARGET}"
+          # If manually triggered, use input; if tag, use pypi; if push to main, use testpypi
           if [ -z "$target" ]; then
-            target="pypi"
+            if [ "$REF_TYPE" = "tag" ]; then
+              target="pypi"
+            else
+              target="testpypi"
+            fi
           fi
           echo "value=$target" >> "$GITHUB_OUTPUT"
 
@@ -75,9 +83,19 @@ jobs:
         with:
           repository-url: https://test.pypi.org/legacy/
           password: ${{ secrets.TEST_PYPI_API_TOKEN }}
+          skip-existing: true
 
       - name: Publish to PyPI
         if: steps.target.outputs.value == 'pypi'
         uses: pypa/gh-action-pypi-publish@release/v1
         with:
           password: ${{ secrets.PYPI_API_TOKEN }}
+
+      - name: Create GitHub Release
+        if: steps.target.outputs.value == 'pypi' && github.ref_type == 'tag'
+        uses: softprops/action-gh-release@v1
+        with:
+          files: dist/*
+          generate_release_notes: true
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

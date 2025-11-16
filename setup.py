@@ -5,16 +5,16 @@ README_PATH = Path(__file__).parent / "README.md"
 
 setup(
     name="noless",
-    version="0.1.0",
+    version="0.1.1-alpha",
     author="NoLess Team",
     description="Multi-agent CLI for automatic dataset discovery and ML project generation",
     long_description=README_PATH.read_text(encoding="utf-8"),
     long_description_content_type="text/markdown",
-    url="https://github.com/your-org/NoLess",
+    url="https://github.com/DWE-CLOUD/NoLess",
     project_urls={
-        "Source": "https://github.com/your-org/NoLess",
-        "Issues": "https://github.com/your-org/NoLess/issues",
-        "Documentation": "https://github.com/your-org/NoLess#readme",
+        "Source": "https://github.com/DWE-CLOUD/NoLess",
+        "Issues": "https://github.com/DWE-CLOUD/NoLess/issues",
+        "Documentation": "https://github.com/DWE-CLOUD/NoLess#readme",
     },
     license="MIT",
     packages=find_packages(exclude=("tests", "tests.*", "examples", "examples.*")),
