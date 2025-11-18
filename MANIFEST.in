@@ -1,9 +1,55 @@
+# MANIFEST.in - Exclude unnecessary files from package distribution
+
+# Include important files
 include README.md
 include LICENSE
 include requirements.txt
-include pyproject.toml
-recursive-include noless *.py
-recursive-include examples *.yaml *.md
+
+# Exclude test files and directories
 recursive-exclude tests *
-recursive-exclude * __pycache__
-recursive-exclude * *.py[co]
+recursive-exclude test *
+recursive-exclude .pytest_cache *
+
+# Exclude examples
+recursive-exclude examples *
+
+# Exclude documentation (heavy markdown files)
+recursive-exclude docs *
+exclude *.md
+include README.md
+
+# Exclude build artifacts
+recursive-exclude build *
+recursive-exclude dist *
+recursive-exclude *.egg-info *
+
+# Exclude CI/CD and development files
+exclude .github
+exclude .gitignore
+exclude .gitlab-ci.yml
+exclude .travis.yml
+exclude Makefile
+exclude tox.ini
+exclude .env*
+
+# Exclude IDE and editor files
+recursive-exclude .vscode *
+recursive-exclude .idea *
+recursive-exclude .vim *
+exclude *.swp
+exclude *.swo
+exclude *~
+
+# Exclude Python cache
+recursive-exclude __pycache__ *
+recursive-exclude .mypy_cache *
+recursive-exclude .tox *
+
+# Exclude large data files
+exclude *.tar.gz
+exclude *.zip
+exclude *.7z
+
+# Only include Python files and necessary configs in noless package
+recursive-include noless *.py
+recursive-include noless *.typed

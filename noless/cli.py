@@ -24,6 +24,7 @@ from noless.ui import (
 from noless.refinement import RefinementAgent
 from noless.project_stats import get_project_stats, record_build, show_build_count
 from noless.query_understanding import get_smart_keywords
+from noless.__version__ import __version__, VERSION_INFO
 import yaml
 import re
 from pathlib import Path
@@ -180,7 +181,7 @@ def _prepare_dataset_artifacts(dataset_entry, output_dir: str, openml_searcher):
 
 
 @click.group()
-@click.version_option(version="0.1.0")
+@click.version_option(version=__version__, prog_name="NoLess")
 @click.option('--show-banner', is_flag=True, default=True, help='Show ASCII banner')
 @click.option('--no-startup', is_flag=True, default=False, help='Skip startup sequence')
 @click.option('--quick-startup', is_flag=True, default=False, help='Show quick startup (fast mode)')
@@ -210,6 +211,25 @@ def main(show_banner, no_startup, quick_startup):
             print_banner()
         except UnicodeEncodeError:
             console.print("[bold cyan]NoLess CLI[/bold cyan]")
+
+
+@main.command()
+def version():
+    """Show NoLess version and feature information"""
+    console.print()
+    console.print(Panel(
+        f"[bold cyan]{VERSION_INFO['name']}[/bold cyan] [yellow]v{__version__}[/yellow]\n"
+        f"[dim]{VERSION_INFO['description']}[/dim]",
+        border_style="cyan",
+        padding=(1, 2)
+    ))
+
+    console.print("\n[bold]Features:[/bold]")
+    for feature in VERSION_INFO['features']:
+        console.print(f"  ✓ {feature}")
+
+    console.print(f"\n[dim]Author: {VERSION_INFO['author']} | License: {VERSION_INFO['license']}[/dim]")
+    console.print()
 
 
 @main.command()

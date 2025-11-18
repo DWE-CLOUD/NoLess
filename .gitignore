@@ -19,11 +19,14 @@ wheels/
 *.egg-info/
 .installed.cfg
 *.egg
+claude/
+.claude/
 
 # Virtual environments
 venv/
 env/
 ENV/
+
 
 # IDE
 .vscode/
@@ -43,6 +46,8 @@ ENV/
 data/
 datasets/
 *.csv
+*.json
+*.txt
 
 # Logs
 logs/

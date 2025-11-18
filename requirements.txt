@@ -1,11 +1,10 @@
+# Core dependencies
 click>=8.1.0
 requests>=2.31.0
 beautifulsoup4>=4.12.0
 rich>=13.0.0
 huggingface-hub>=0.19.0
 kaggle>=1.5.16
-torch>=2.0.0
-tensorflow>=2.13.0
 scikit-learn>=1.3.0
 pandas>=2.0.0
 numpy>=1.24.0
@@ -18,3 +17,17 @@ questionary>=2.0.0
 prompt_toolkit>=3.0.0
 colorama>=0.4.6
 pyfiglet>=1.0.0
+pydantic>=2.0.0
+
+# Optimization and analysis
+coverage>=7.0.0
+aiohttp>=3.9.0
+aiofiles>=23.1.0
+
+# Optional: ML Frameworks (install as needed for specific tasks)
+# torch>=2.0.0          # Optional: For PyTorch models (pip install torch)
+# tensorflow>=2.13.0    # Optional: For TensorFlow/Keras models (pip install tensorflow)
+
+# Optional: Advanced analysis tools (lazy-loaded)
+# bandit>=1.7.5         # Optional: Security analysis (pip install bandit)
+# radon>=6.0.1          # Optional: Complexity analysis (pip install radon)

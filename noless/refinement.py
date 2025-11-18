@@ -169,33 +169,48 @@ class RefinementAgent:
                 self._show_refinement_summary()
 
     def _classify_request(self, request: str) -> str:
-        """Classify the type of user request using LLM."""
-        prompt = f"""Classify this code change request into ONE category:
+        """Classify the type of user request using keyword matching + optional LLM."""
+        request_lower = request.lower()
+
+        # First, try keyword-based classification (faster, more reliable for small models)
+        if any(word in request_lower for word in ["explain", "explain", "what", "how", "why", "describe", "tell me", "show me"]):
+            return "explain"
+
+        if any(word in request_lower for word in ["add", "create", "new", "implement", "build", "write"]):
+            return "add"
+
+        if any(word in request_lower for word in ["fix", "bug", "broken", "error", "issue", "problem"]):
+            return "fix"
+
+        if any(word in request_lower for word in ["optimize", "faster", "efficient", "speed", "performance", "improve", "better"]):
+            return "optimize"
+
+        if any(word in request_lower for word in ["refactor", "restructure", "organize", "clean", "rewrite", "redesign"]):
+            return "refactor"
+
+        # Fallback to LLM classification if keywords don't match
+        prompt = f"""Classify this code change request into ONE category (lowercase):
 Request: "{request}"
 
-Categories:
-- add: Adding new features, functions, classes, or files
-- modify: Changing existing functionality
-- fix: Fixing bugs or errors
-- optimize: Performance improvements
-- explain: Asking for explanations
-- refactor: Code restructuring
+Categories: add, modify, fix, optimize, explain, refactor
 
-Return ONLY the category name (lowercase), nothing else."""
+Return ONLY the category name, nothing else."""
 
         try:
             response = self.client.generate(
                 self.llm_model,
                 prompt,
-                system="You are a code request classifier. Return only the category name.",
+                system="You are a code request classifier. Return only the category name in lowercase.",
                 temperature=0.1
             )
-            category = response.strip().lower()
+            category = response.strip().lower().split()[0]  # Take first word in case of extra text
             if category in ["add", "modify", "fix", "optimize", "explain", "refactor"]:
                 return category
-            return "modify"  # Default
         except Exception:
-            return "modify"
+            pass
+
+        # Default to modify if all else fails
+        return "modify"
 
     def _identify_affected_files(self, request: str, output_dir: str) -> List[str]:
         """Identify which files might be affected by the request."""
@@ -238,13 +253,22 @@ Return ONLY the JSON array, nothing else."""
     def _apply_refinement(self, request: str, request_type: str, output_dir: str, project_info: Dict[str, Any]) -> bool:
         """Apply the requested refinement to the codebase."""
         console.print("\n")
+        console.print(f"[dim]Processing request type: [bold]{request_type}[/bold][/dim]")
+
         with console.status("[bold yellow]🤖 AI is analyzing and applying changes...", spinner="dots"):
             try:
+                # Route based on request type
                 if request_type == "explain":
                     return self._handle_explanation(request, output_dir)
                 elif request_type == "add":
                     return self._handle_addition(request, output_dir, project_info)
+                elif request_type in ["modify", "fix", "optimize", "refactor"]:
+                    # All modification-like requests use the modification handler
+                    # (fix = modify with focus on bugs, optimize = modify with focus on performance, etc.)
+                    return self._handle_modification(request, output_dir, project_info)
                 else:
+                    # Unknown type, default to modify
+                    console.print(f"[yellow]Unknown request type '{request_type}', treating as modification[/yellow]")
                     return self._handle_modification(request, output_dir, project_info)
             except Exception as e:
                 console.print(f"[red]Error: {e}[/red]")

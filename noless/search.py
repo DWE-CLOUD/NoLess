@@ -5,12 +5,13 @@ from bs4 import BeautifulSoup
 from typing import List, Dict, Optional
 import os
 import json
+from noless.cache_manager import get_cache_manager
 
 
 class DatasetSearcher:
     """Search for datasets across multiple sources"""
-    
-    def __init__(self):
+
+    def __init__(self, enable_cache: bool = True):
         self.sources = {
             "huggingface": HuggingFaceSearcher(),
             "uci": UCISearcher()
@@ -18,20 +19,30 @@ class DatasetSearcher:
         self._kaggle_enabled = self._has_kaggle_credentials()
         if self._kaggle_enabled:
             self.sources["kaggle"] = KaggleSearcher()
-    
+
+        self.cache = get_cache_manager() if enable_cache else None
+
     def search(self, query: str, source: str = "all", limit: int = 10) -> List[Dict]:
         """Search for datasets
-        
+
         Args:
             query: Search query
             source: Source to search (all, huggingface, kaggle, uci)
             limit: Maximum number of results
-            
+
         Returns:
             List of dataset information dictionaries
         """
+        # Check cache first
+        cache_key = f"dataset_search:{source}:{query}:{limit}"
+        if self.cache:
+            cached = self.cache.get(cache_key)
+            if cached:
+                print("[dim]📦 Using cached dataset search results[/dim]")
+                return cached
+
         results = []
-        
+
         if source == "all":
             for source_name, searcher in self.sources.items():
                 try:
@@ -44,8 +55,14 @@ class DatasetSearcher:
                 raise RuntimeError("Kaggle API credentials not configured. Add kaggle.json to continue.")
             if source in self.sources:
                 results = self.sources[source].search(query, limit=limit)
-        
-        return results[:limit]
+
+        results = results[:limit]
+
+        # Cache the results
+        if self.cache:
+            self.cache.set(cache_key, results, category="dataset_search")
+
+        return results
 
     def _has_kaggle_credentials(self) -> bool:
         potential_paths = []
