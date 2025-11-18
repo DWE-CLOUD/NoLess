@@ -1,109 +1,304 @@
-# NoLess Library 🚀
+Noless CLI
+---
 
-NoLess is a Python library for building complete machine-learning projects with the help of cooperative AI agents and local LLMs. It exposes the same generators, planners, and feedback loops that power the original CLI so you can embed them inside notebooks, services, or custom tooling.
+# NoLess: Multi-Agent AI Model Builder
 
-## Why NoLess
+```
+                        ╔══════════════════════════════════════════════════════════════════════╗
+                        ║                                                                      ║
+                        ║  ███╗   ██╗ ██████╗     ██╗     ███████╗███████╗███████╗             ║
+                        ║  ████╗  ██║██╔═══██╗    ██║     ██╔════╝██╔════╝██╔════╝             ║
+                        ║  ██╔██╗ ██║██║   ██║    ██║     █████╗  ███████╗███████╗             ║
+                        ║  ██║╚██╗██║██║   ██║    ██║     ██╔══╝  ╚════██║╚════██║             ║
+                        ║  ██║ ╚████║╚██████╔╝    ███████╗███████╗███████║███████║             ║
+                        ║  ╚═╝  ╚═══╝ ╚═════╝     ╚══════╝╚══════╝╚══════╝╚══════╝             ║
+                        ║                                                                      ║
+                        ║  Multi-Agent AI Model Builder | LLM-Powered Intelligence              ║
+                        ║  Build AI Models Without Limits | Six Specialized Agents              ║
+                        ║  Real-Time Code Generation | Intelligent Dataset Discovery             ║
+                        ║                                                                      ║
+                        ╚══════════════════════════════════════════════════════════════════════╝
+```
 
-- 🤖 **Multi-agent automation** – orchestrate dataset discovery, architecture design, and code generation with reusable agents.
-- 🧱 **LLM-powered builders** – generate configs, models, training loops, and tests with a single call to `ModelGenerator`.
-- 🔍 **Unified dataset search** – query OpenML, Hugging Face, Kaggle, and UCI from the `DatasetSearcher` API.
-- 🛠️ **Interactive refinement** – use `InteractiveFeedbackLoop` to iteratively review and improve generated code.
-- ✅ **Production-ready outputs** – every project ships with config, model, training, tests, requirements, and README files.
+NoLess is an advanced CLI-driven AI engineering system that uses a coordinated **multi-agent architecture** to automatically build machine learning projects from end to end. It searches datasets, designs architectures, generates production-ready code, manages training, and optimizes performance — all autonomously.
+
+This approach eliminates boilerplate work and dramatically accelerates machine learning development.
+
+---
+
+## Key Features
+
+### Multi-Agent Architecture
+
+NoLess uses six specialized AI agents that collaborate to generate complete ML solutions:
+
+| Agent                  | Function                                        |
+| ---------------------- | ----------------------------------------------- |
+| **Orchestrator Agent** | Controls workflow and execution                 |
+| **Dataset Agent**      | Searches OpenML, Hugging Face, Kaggle, UCI      |
+| **Model Agent**        | Designs optimized architectures                 |
+| **Code Agent**         | Generates clean, production-ready code          |
+| **Training Agent**     | Builds and manages the training pipeline        |
+| **Optimization Agent** | Performs hyperparameter tuning and improvements |
+
+### Dataset Search
+
+* OpenML (20,000+ datasets)
+* HuggingFace Datasets Hub
+* UCI Repository
+* Kaggle Repository
+* Task-aware filtering and dataset ranking
+
+### Real-Time Code Generation
+
+Automatically generates:
+
+* Model architectures
+* Training scripts
+* Preprocessing pipelines
+* Evaluation metrics
+* Configuration files
+* Documentation
+
+All files follow industry best practices and production-level standards.
+
+### Interactive CLI
+
+* Step-by-step workflow
+* Intelligent recommendations
+* Rich outputs and enhanced usability
+* ASCII banner and clean interface
+
+### Framework Support
+
+* PyTorch
+* TensorFlow / Keras
+* scikit-learn
+
+---
 
 ## Installation
 
+### Option 1: Install from PyPI (Recommended)
+
 ```bash
-# Clone the repository
-git clone https://github.com/your-org/noless.git
-cd noless
+pip install noless
+```
 
-# Install dependencies
+#### Enable optional capabilities
+
+The base install keeps dependencies minimal. Add feature sets on demand:
+
+```bash
+# Dataset downloader helpers (Hugging Face, Kaggle)
+pip install "noless[data]"
+
+# Training script generators / local experiments (PyTorch, TensorFlow, scikit-learn)
+pip install "noless[ml]"
+
+# LLM autopilot integrations (OpenAI, Anthropic)
+pip install "noless[llm]"
+
+# Everything
+pip install "noless[all]"
+```
+
+### Option 2: Install from Source
+
+```bash
+git clone https://github.com/DWE-CLOUD/NoLess.git
+cd NoLess
 pip install -r requirements.txt
-
-# Install the library in editable mode
 pip install -e .
 ```
 
-Optional extras:
-- Install [Ollama](https://ollama.com) and pull at least one model (e.g. `ollama pull deepseek-r1:1.5b`).
-- Configure Kaggle or Hugging Face credentials if you plan to download datasets automatically.
+### Verify Installation
+
+```bash
+noless --help
+```
+
+---
 
 ## Quick Start
 
-```python
-from noless.generator import ModelGenerator
-from noless.ollama_client import OllamaClient
-
-client = OllamaClient()
-generator = ModelGenerator(llm_model="deepseek-r1:1.5b", ollama_client=client)
-project = generator.create_project(
-    task="image-classification",
-    framework="pytorch",
-    dataset="mnist",
-    output_dir="./mnist_classifier",
-)
-
-print(project["files"])
-```
-
-The output directory now contains `config.yaml`, `model.py`, `train.py`, `test_model.py`, `requirements.txt`, and a README ready for version control.
-
-## Key Modules
-
-### `noless.generator.ModelGenerator`
-Builds end-to-end ML project skeletons. Supports PyTorch, TensorFlow, and scikit-learn targets, optional Ollama-powered authoring, and automatic AI reviews via `CodeValidator`.
-
-### `noless.autopilot.AutopilotPlanner`
-Uses an LLM to interpret natural-language goals, ask clarifying questions, and produce structured blueprints (task, framework, dataset hints, architecture recommendations).
-
-### `noless.search.DatasetSearcher`
-Aggregates dataset discovery across OpenML, Hugging Face, Kaggle, and UCI. Returns normalized metadata and can download ready-to-use files.
-
-### `noless.feedback_loop.InteractiveFeedbackLoop`
-Provides a conversational refinement loop for any generated file. Supply code plus context and iteratively apply user or AI feedback.
-
-### `noless.code_validator.CodeValidator`
-Runs AI reviews against generated code using a larger reviewer model when available, returning improved code plus issue/suggestion lists.
-
-### `noless.agents.MultiAgentSystem`
-Optional cooperative layer that lets you run the six specialized agents (orchestrator, dataset, model, code, training, optimization) inside your own applications.
-
-## End-to-End Pipeline Example
-
-```python
-from noless.autopilot import AutopilotPlanner
-from noless.generator import ModelGenerator
-from noless.search import DatasetSearcher
-from noless.ollama_client import OllamaClient
-
-client = OllamaClient()
-planner = AutopilotPlanner(client, llm_model="deepseek-r1:1.5b")
-analysis = planner.plan_project("detect defects in solar panel images")
-
-searcher = DatasetSearcher()
-datasets = searcher.search(analysis.dataset_query, limit=5)
-
-project = ModelGenerator(
-    llm_model="deepseek-r1:1.5b",
-    reviewer_model="mixtral:8x7b",
-    ollama_client=client,
-).create_project(
-    task=analysis.task,
-    framework=analysis.framework,
-    dataset=datasets[0].name if datasets else None,
-    output_dir="./solar_inspector",
-    dataset_metadata=datasets[0].__dict__ if datasets else None,
-)
-```
-
-## Testing
-
-Run the unit test suite after making changes:
+### Interactive Mode
 
 ```bash
-python -m unittest
+python -m noless.cli interactive
 ```
+
+### Direct Creation
+
+```bash
+python -m noless.cli create \
+  --task image-classification \
+  --framework pytorch \
+  --agents
+```
+
+---
+
+## Usage Examples
+
+### Multi-Agent Project Creation
+
+```bash
+python -m noless.cli create \
+  --task image-classification \
+  --framework pytorch \
+  --output ./my_classifier \
+  --agents
+```
+
+### Dataset Search
+
+```bash
+python -m noless.cli search \
+  --query "diabetes classification" \
+  --source openml \
+  --limit 10
+```
+
+### Dataset Download
+
+```bash
+python -m noless.cli download openml:37 --output ./data
+```
+
+---
+
+## Autopilot Mode (Ollama-LMM Powered)
+
+NoLess can use local LLMs (via Ollama) to automatically plan, design, and build entire projects.
+
+```bash
+python -m noless.cli autopilot \
+  --description "detect defects in solar panel images" \
+  --output ./solar_inspector
+```
+
+Specify a model:
+
+```bash
+python -m noless.cli autopilot --llm-model deepseek-r1:7b
+```
+
+Autopilot performs requirement analysis, dataset extraction, dataset selection, downloading, multi-agent generation, and documentation creation.
+
+---
+
+## Generated Project Structure
+
+```
+my_model/
+├── train.py
+├── model.py
+├── config.yaml
+├── utils.py
+├── requirements.txt
+└── README.md
+```
+
+All modules are cleanly structured, modular, and fully customizable.
+
+---
+
+## Supported Tasks
+
+| Task                    | Description                 | Frameworks          |
+| ----------------------- | --------------------------- | ------------------- |
+| Image Classification    | Vision-based categorization | PyTorch, TensorFlow |
+| Text Classification     | NLP classification tasks    | PyTorch, TensorFlow |
+| Object Detection        | Bounding box detection      | PyTorch             |
+| Sentiment Analysis      | Polarity scoring            | PyTorch, TensorFlow |
+| Regression              | Numerical prediction        | All                 |
+| Clustering              | Unsupervised grouping       | scikit-learn        |
+| Time-Series Forecasting | Sequential prediction       | PyTorch, TensorFlow |
+| General NLP Tasks       | Sequence and token tasks    | PyTorch, TensorFlow |
+
+---
+
+## Multi-Agent Architecture
+
+### How It Works
+
+1. The Orchestrator interprets the request
+2. The Dataset Agent performs multi-source dataset search
+3. The Model Agent creates an appropriate architecture
+4. The Code Agent generates the necessary modules
+5. The Training Agent constructs training workflows
+6. The Optimization Agent tunes configurations and parameters
+
+### Communication
+
+* Asynchronous message passing
+* Shared context memory
+* Priority scheduling
+* Real-time updates
+
+---
+
+## CLI Reference
+
+```bash
+noless search -q "query"
+noless create -t TASK -f FRAMEWORK [--agents]
+noless interactive
+noless autopilot
+noless download DATASET_ID
+noless agents
+noless templates
+```
+
+---
+
+## Configuration Example
+
+```yaml
+task: image-classification
+framework: pytorch
+
+model:
+  architecture: resnet50
+  pretrained: true
+  num_classes: 10
+
+training:
+  epochs: 50
+  batch_size: 32
+  learning_rate: 0.001
+```
+
+---
+
+## Roadmap
+
+* Distributed training
+* Automated model deployment
+* Experiment tracking and model registry
+* Additional dataset sources
+* Web-based UI
+* Custom agent plugins
+* AutoML-style pipeline search
+
+---
 
 ## License
 
-NoLess is released under the MIT License. See `LICENSE` for details.
+MIT License. Refer to the `LICENSE` file.
+
+---
+
+## Acknowledgments
+
+* OpenML
+* Hugging Face
+* PyTorch and TensorFlow teams
+* Rich library
+* Click CLI framework
+
+---
+
+
+Just tell me.

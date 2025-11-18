@@ -1,6 +1,6 @@
 """Version information for NoLess."""
 
-__version__ = "0.2.1a1"
+__version__ = "0.2.1a2"
 __title__ = "NoLess"
 __description__ = "AI-powered ML project generation with local LLMs"
 __author__ = "NoLess Team"
